@@ -1,18 +1,33 @@
 import os
 
-from rand2dmap.tree import Rect, split_tree_of_rectangles
+from rand2dmap.tree import (
+    Rect,
+    split_tree_of_rectangles,
+    SplitRectangleError
+)
 
+DEFAULT_OPTIONS = {
+    'padding': 1,
+    'min_wall_size': 2,
+    'min_walls_ratio': 0.4,
+    'min_area_percent': 0.3
+}
 
 MAP_WIDTH = 100
 MAP_HEIGHT = 100
 
-SPLITS = 4
+SPLITS = 5
 
 MAPS_PATH = './.maps'
 
 
-wrap_rect = Rect(0, 0, MAP_WIDTH, MAP_HEIGHT)
-tree = split_tree_of_rectangles(wrap_rect, SPLITS)
+wrap_rect = Rect(0, 0, MAP_WIDTH, MAP_HEIGHT, DEFAULT_OPTIONS)
+tree = None
+while tree is None:
+    try:
+        tree = split_tree_of_rectangles(wrap_rect, SPLITS, DEFAULT_OPTIONS)
+    except SplitRectangleError:
+        print('.', end='')
 
 MAP_ARRAY = []
 for y in range(0, MAP_HEIGHT):
@@ -36,6 +51,7 @@ def update_rooms(node):
         # create path between leaf's centers (nodes not rooms!)
         l1 = node.left.data
         l2 = node.right.data
+
         c1 = (l1.x + int(l1.width / 2), l1.y + int(l1.height / 2))
         c2 = (l2.x + int(l2.width / 2), l2.y + int(l2.height / 2))
 
@@ -60,3 +76,5 @@ with open(new_map_path, 'w') as map_file:
         for t in r:
             map_file.write(t)
         map_file.write('\n')
+
+print('\nSuccess: new map ({}x{}): {}'.format(MAP_WIDTH, MAP_HEIGHT, new_map_path))
