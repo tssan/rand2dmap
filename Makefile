@@ -8,6 +8,12 @@ TMP_MAPS_PATH?=.maps
 env-setup:
 	@virtualenv -q -p python3 $(ENV_PATH);
 	@mkdir -p $(TMP_MAPS_PATH)
+	@$(MAKE) env-update
+
+
+.PHONY: env-update
+env-update:
+	@. $(ENV_PATH)/bin/activate && pip -q install -r requirements.txt
 
 
 .PHONY: clean-py

@@ -5,6 +5,8 @@ from rand2dmap.tree import (
     split_tree_of_rectangles,
     SplitRectangleError
 )
+from rand2dmap.preview import create_preview
+
 
 DEFAULT_OPTIONS = {
     'padding': 1,
@@ -78,3 +80,5 @@ with open(new_map_path, 'w') as map_file:
         map_file.write('\n')
 
 print('\nSuccess: new map ({}x{}): {}'.format(MAP_WIDTH, MAP_HEIGHT, new_map_path))
+
+create_preview(new_map_path, MAP_WIDTH, MAP_HEIGHT, 2)

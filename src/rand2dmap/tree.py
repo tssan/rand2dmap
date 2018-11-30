@@ -47,8 +47,8 @@ class Rect:
         x = randint(self.x + padding, self.x + int(self.width / 2))
         y = randint(self.y + padding, self.y + int(self.height / 2))
 
-        width = randint(min_wall_size, self.x + self.width - x)
-        height = randint(min_wall_size, self.y + self.height - y)
+        width = randint(min_wall_size, self.x + self.width - x) - padding
+        height = randint(min_wall_size, self.y + self.height - y) - padding
 
         if (height / width < min_walls_ratio or width / height < min_walls_ratio or
                 width * height < min_area_percent * self.area):
