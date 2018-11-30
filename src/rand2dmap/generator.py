@@ -21,6 +21,7 @@ MAP_HEIGHT = 100
 SPLITS = 5
 
 MAPS_PATH = './.maps'
+MAP_FORMAT = 'dung_{}.map'
 
 
 wrap_rect = Rect(0, 0, MAP_WIDTH, MAP_HEIGHT, DEFAULT_OPTIONS)
@@ -72,13 +73,23 @@ def update_rooms(node):
 
 update_rooms(tree)
 
-new_map_path = os.path.join(MAPS_PATH, 'sample.map')
+if not os.path.exists(MAPS_PATH):
+    os.mkdir(MAPS_PATH)
+
+maps_files = [
+    f for f in os.listdir(MAPS_PATH)
+    if f.endswith('.map') and os.path.isfile(os.path.join(MAPS_PATH, f))
+]
+maps_count = len(maps_files)
+
+new_map_path = os.path.join(MAPS_PATH, MAP_FORMAT.format(maps_count + 1))
 with open(new_map_path, 'w') as map_file:
     for r in MAP_ARRAY:
         for t in r:
             map_file.write(t)
         map_file.write('\n')
 
-print('\nSuccess: new map ({}x{}): {}'.format(MAP_WIDTH, MAP_HEIGHT, new_map_path))
-
 create_preview(new_map_path, MAP_WIDTH, MAP_HEIGHT, 2)
+
+print('\nSuccess: new map ({}x{}): {}'.format(MAP_WIDTH, MAP_HEIGHT, new_map_path))
+print('Saved maps: {}'.format(maps_count))
